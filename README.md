@@ -12,7 +12,7 @@ The mean absolute deviation, MAD .	<br>
 The standard deviation, σ . <br>
 
 <h1>Project deliverable 1(D1)</h1> 
-<h2>Due Oct. 3 2023<h2>
+Due Oct. 3 2023 <br>
   
 <h3>PROBLEM 1 [10 MARKS] </h3>
 Using the Goal-Question-Metric (GQM) approach (or one of its extensions), present one goal specific to METRICSTICS and articulate 2N questions related to that goal, where N is the team size. Discuss whether any metrics help answer those questions. <br><br>
