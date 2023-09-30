@@ -7,9 +7,9 @@ The minimum, m, is the smallest of the values in the given data set. (m need not
 The maximum, M, is the largest of the values in the given data set. (M need not be unique.)  <br>
 The mode, o, is the value that appears most frequently in the given data set. (o need not be unique.)  <br>
 The median, d, is the middle number if n is odd, and is the arithmetic mean of the two middle numbers if n is even.  <br>
-The arithmetic mean, μ . <br>
-The mean absolute deviation, MAD .	<br>
-The standard deviation, σ . <br>
+The arithmetic mean, μ. <br>
+The mean absolute deviation, MAD.	<br>
+The standard deviation, σ. <br>
 
 <h1>Project deliverable 1(D1)</h1> 
 Due Oct. 3 2023 <br>
