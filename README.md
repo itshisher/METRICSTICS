@@ -26,7 +26,7 @@ There can be several use cases, including carrying out a sequence of calculation
 <br><br>
 <table>
   <tr>
-    <th colspan="4">Contribution talble for D1</th>
+    <th colspan="4">Contribution table for D1</th>
   </tr>
   <tr>
     <th>Group members</th>
