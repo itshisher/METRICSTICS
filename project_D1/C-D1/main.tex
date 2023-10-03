@@ -1,0 +1,152 @@
+\documentclass[letterpaper]{report}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{xspace}
+\usepackage[dvipsnames]{xcolor}
+\fboxsep0pt
+\usepackage{hyperref}
+\usepackage{fontawesome5}
+\usepackage{tabularray}
+
+\usepackage{caption}
+\usepackage{glossaries}
+
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  filecolor=magenta,     
+  urlcolor=cyan,
+  pdftitle={. . .},
+  pdfpagemode=FullScreen,
+}
+
+
+\renewcommand{\labelenumii}{\arabic{enumi}.\arabic{enumii}}
+\usepackage[inline]{enumitem}
+
+
+% \author{Yang Cao,...}
+\newcommand{\titlestr}{METRISTICS}
+
+\begin{document}
+\begin{titlepage}
+  \centering
+  \includegraphics[width=0.8\textwidth]{image.png}
+
+  \vspace{0.5cm}
+  {\LARGE \bf{\titlestr} \par}
+  
+  \vspace{.5cm}
+  {\LARGE {SOEN 6611: SOFTWARE MEASUREMENT \\ (GROUP C)} \par}
+
+  \vspace{0.5cm}
+
+  {\large
+  \begin{tabular}{@{} l l @{}}
+    Anirudh Boddu &  40225271 \\
+    Ayushi Chaudhary &  40224978 \\
+    Riddhi Bhuva &  40220969 \\
+    Visnunathan Chidambaranathan &  40230157 \\
+    Yang Cao &  26654029 \\
+  \end{tabular}
+  }
+  
+  \vspace{0.5cm}
+  \today
+  
+
+  \vfill
+\end{titlepage}
+
+\newpage
+
+\thispagestyle{empty}
+\tableofcontents
+\listoffigures
+\listoftables
+\clearpage
+
+
+\chapter*{Introduction}
+\addcontentsline{toc}{chapter}{\protect\numberline{}Introduction}
+\textbf{The purpose of descriptive statistics is to quantitatively describe a collection of data by measures of central tendency, measures of frequency, and measures of variability.  
+}
+\hfill \break
+
+\noindent\textbf{Let x be a random variable that can take values from a finite data set x1, x2, x3, ..., xn, with each value having the same probability. }
+
+\begin{itemize}
+    \item The minimum, m, is the smallest of the values in the given data set. (m need not be unique.)  
+    \item The maximum, M, is the largest of the values in the given data set. (M need not be unique.) 
+    \item The mode, o, is the value that appears most frequently in the given data set. (o need not be unique.) 
+    \item The median, d, is the middle number if n is odd, and is the arithmetic mean of the two middle numbers if n is even.
+    \item The arithmetic mean, $\mu$, is given by \[\mu = \frac{1}{n} \sum^{n}_{i=1} x_i\]
+    \item The mean absolute deviation, MAD, is given by
+    \[MAD = \frac{1}{n} \sum^{n}_{i=1} |x_i - \mu_i|\]
+    \item The standard deviation, $\sigma$, is given by 
+    \[\sigma = \sqrt{\frac{1}{n} \sum^{n}_{i=1} x_i - \mu^2}\]
+\end{itemize} 
+
+\noindent \textbf{Project URL:} \\
+\href{https://github.com/itshisher/METRICSTICS}{\faIcon{github}}\url{https://github.com/itshisher/METRICSTICS}\\
+\href{https://github.com/itshisher/METRICSTICS}{\faIcon{link}}\url{https://www.overleaf.com/read/gxkjzdqfbndm}
+
+
+\chapter{Problem 1}
+\input{problem1}
+
+\chapter{Problem 2}
+\input{problem2}
+
+\chapter*{Contribution table}
+\addcontentsline{toc}{chapter}{\protect\numberline{}Contribution table}
+\begin{table}[h]
+\begin{tabular}{ | p{3cm} | p{3cm} | p{8cm} |}
+ \hline
+    Anirudh Boddu &  40225271 & {1. Questions Formulation. \newline 2. Collaborated with the team in defining the goal and framing questions. \newline 3. Ensured goal is SMART (Specific, Measurable, Achievable, Relevant, Time-bound).\newline 4. Defined Actor, Use Cases and Use Case Scenarios.}\\
+    \hline
+    Ayushi Chaudhary &  40224978 & {1. Co-ordinated team meetings. \newline 2. Questions Formulation. \newline 3. Defined Use Cases and Use Case Scenarios. \newline 4. Latex documentation.} \\
+    \hline
+    Riddhi Bhuva &  40220969 & {1. Questions Formulation. \newline 2. Ensure goal is SMART (Specific, Measurable, Achievable, Relevant, Time-bound). \newline 3. Designed Use Case diagram. \newline 4.Research and Analysis.}\\
+    \hline
+    Visnunathan Chidambaranathan &  40230157 & {1. Questions Formulation. \newline 2. Metric Identification. \newline 3. Ensure that metrics are suitable for measuring progress toward answering the questions. \newline 4. Research and Analysis.}\\
+    \hline
+    Yang Cao &  26654029 & {1. Questions Formulation. \newline 2. Metric Identification. \newline 3. Ensure that metrics are suitable for measuring progress toward answering the questions. \newline 4. Latex documentation.}\\
+ \hline
+ \end{tabular}
+\renewcommand{\thetable}{\arabic{table}}
+\caption{Contribution table}
+\label{tab:table1}
+\end{table}
+
+\clearpage % Start a new page for the bibliography
+\phantomsection % Ensure correct hyperlinking
+\addcontentsline{toc}{section}{\textbf{Bibliography}}
+\begin{thebibliography}{. . .}
+\bibitem{key1}
+Prof. Pankaj Kamthan,
+\textit{INTRODUCTION TO FRAMEWORKS FOR SOFTWARE MEASUREMENT }
+Lecture Notes, SOEN 6611
+
+\bibitem{key2}
+User Modelling Diagram
+\url{https://www.lucidchart.com}
+
+\bibitem{key3}
+SMART Performance Metrics
+\url{https://praxie.com/smart-performance-metrics-tools-templates/#:~:text=SMART%20is%20an%20acronym%20that,help%20it%20achieve%20that%20success}
+
+\bibitem{key4}
+Use-Case Diagrams
+\url{https://www.ibm.com/docs/en/rational-soft-arch/9.6.1?topic=diagrams-use-case}
+
+\bibitem{key5}
+Victor R. Basili   Gianluigi Caldiera1   H. Dieter Rombach2,
+\textit{THE GOAL QUESTION METRIC APPROACH }
+Department of Computer Science, University Of Maryland
+\url{https://www.ibm.com/docs/en/rational-soft-arch/9.6.1?topic=diagrams-use-case}
+
+\end{thebibliography}
+\end{document}
+
