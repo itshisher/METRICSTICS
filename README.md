@@ -12,7 +12,7 @@ The mean absolute deviation, MAD.	<br>
 The standard deviation, σ. <br>
 
 <h1>Project deliverable 1(D1)</h1> 
-Due Oct. 3 2023 <br>
+Due Oct. 2 2023 <br>
   
 <h3>PROBLEM 1 [10 MARKS] </h3>
 Using the Goal-Question-Metric (GQM) approach (or one of its extensions), present one goal specific to METRICSTICS and articulate 2N questions related to that goal, where N is the team size. Discuss whether any metrics help answer those questions. <br><br>
@@ -26,42 +26,65 @@ There can be several use cases, including carrying out a sequence of calculation
 <br><br>
 <table>
   <tr>
-    <th colspan="4">Contribution talble for D1</th>
+    <th colspan="4">Contribution table for D1</th>
   </tr>
   <tr>
-    <th>Group members</th>
-    <th>Student ID</th>
-    <th>Problem 1</th>
-    <th>Problem 2</th>
+    <th>Anirudh Boddu</th>
+    <th>40225271</th>
+    <th>
+      <ol>
+        <li>Questions Formulation.</li>
+        <li>Collaborated with the team in defining the goal and framing questions.</li>
+        <li>Ensured goal is SMART (Specific, Measurable, Achievable, Relevant, Time-bound).</li>
+        <li>Defined Actor, Use Cases and Use Case Scenarios.</li>
+      </ol>
   </tr>
+
   <tr>
-    <td>Yang Cao</td>
-    <td>26654029</td>
-    <td>Two questions</td>
-    <td>User case model</td>
+    <th>Ayushi Chaudhary</th>
+    <th>40224978</th>
+    <th>
+      <ol>
+        <li>Co-ordinated team meetings.</li>
+        <li>Questions Formulation.</li>
+        <li>Defined Use Cases and Use Case Scenarios.</li>
+        <li>Latex documentation.</li>
+      </ol>
   </tr>
+
   <tr>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
+    <th>Riddhi Bhuva</th>
+    <th>40220969</th>
+    <th>
+      <ol>
+        <li>Questions Formulation.</li>
+        <li>Ensure goal is SMART (Specific, Measurable, Achievable, Relevant, Time-bound).</li>
+        <li>Designed Use Case diagram.</li>
+        <li>Research and Analysis.</li>
+      </ol>
   </tr>
+
   <tr>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
+    <th>Visnunathan Chidambaranathan</th>
+    <th>40230157</th>
+    <th>
+      <ol>
+        <li>Questions Formulation.</li>
+        <li>Metric Identification.</li>
+        <li>Ensure that metrics are suitable for measuring progress toward answering the questions.</li>
+        <li>Research and Analysis.</li>
+      </ol>
   </tr>
+
   <tr>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-  </tr>
-  <tr>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
+    <th>Yang Cao</th>
+    <th>26654029</th>
+    <th>
+      <ol>
+        <li>Questions Formulation.</li>
+        <li>Metric Identification.</li>
+        <li>Ensure that metrics are suitable for measuring progress toward answering the questions.</li>
+        <li>Latex documentation.</li>
+      </ol>
   </tr>
 </table>
