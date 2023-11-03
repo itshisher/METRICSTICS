@@ -6,6 +6,7 @@ from tkinter import filedialog
 import logging
 import re
 from tkinter import messagebox
+from concurrent.futures import ProcessPoolExecutor
 
 
 # logging format
@@ -14,9 +15,11 @@ logging.basicConfig(filename="scraper.log", level=logging.DEBUG,
 
 
 class StatisticsCalculator:
-    def __init__(self, root):
+    def __init__(self, root, sessionId):
         self.root = root
+        self.sessionId = sessionId
         self.root.title("Statistic Calculator")
+        self.executor = ProcessPoolExecutor()
         self.clear_widgets()
         self.create_widgets()
 
@@ -111,6 +114,51 @@ class StatisticsCalculator:
         )
         logging.info(info)
         return num_list
+
+
+    # Modify all calculation methods to use the executor
+    def calculateMinValue(self):
+        input_str = self.num_entry.get()
+        if num_list := self.split_numbers(input_str):
+            future = self.executor.submit(self.calculateMin, num_list)
+            future.add_done_callback(self.on_calculation_done("Minimum is: {}"))
+
+    def calculateMaxValue(self):
+        input_str = self.num_entry.get()
+        if num_list := self.split_numbers(input_str):
+            future = self.executor.submit(self.calculateMax, num_list)
+            future.add_done_callback(self.on_calculation_done("Maximum is: {}"))
+
+    def calculateMeanValue(self):
+        input_str = self.num_entry.get()
+        if num_list := self.split_numbers(input_str):
+            future = self.executor.submit(self.calculateMean, num_list)
+            future.add_done_callback(self.on_calculation_done("Mean is: {}"))
+
+    def calculateModeValue(self):
+        input_str = self.num_entry.get()
+        if num_list := self.split_numbers(input_str):
+            future = self.executor.submit(self.calculateMode, num_list)
+            future.add_done_callback(self.on_calculation_done("Mode is: {}"))
+
+    def calculateMedianValue(self):
+        input_str = self.num_entry.get()
+        if num_list := self.split_numbers(input_str):
+            future = self.executor.submit(self.calculateMedian, num_list)
+            future.add_done_callback(self.on_calculation_done("Median is: {}"))
+
+    def calculateMADValue(self):
+        input_str = self.num_entry.get()
+        if num_list := self.split_numbers(input_str):
+            future = self.executor.submit(self.calculateMAD, num_list)
+            future.add_done_callback(self.on_calculation_done("Mean Absolute Deviation is: {}"))
+
+    def calculateSDValue(self):
+        input_str = self.num_entry.get()
+        if num_list := self.split_numbers(input_str):
+            future = self.executor.submit(self.calculateSD, num_list)
+            future.add_done_callback(self.on_calculation_done("Standard Deviation is: {}"))
+
 
 
     def calculateMin(self):
@@ -257,6 +305,18 @@ class StatisticsCalculator:
             logging.info(info)
             return std_deviation
 
+
+    def on_calculation_done(self, message_format):
+        def callback(future):
+            try:
+                result = future.result()
+                self.display_result(message_format.format(result))
+            except Exception as e:
+                messagebox.showerror('Error', str(e))
+                logging.error(f'Error in calculation: {str(e)}')
+
+        return callback
+
     def display_result(self, result_text):
         self.result_label.config(text=result_text)
         logging.info('Result successfully displayed!')
@@ -312,5 +372,6 @@ class StatisticsCalculator:
     def mainFunction(self):
         self.clear_widgets()
         self.root.mainloop()
+        self.executor.shutdown(wait=False)
 
 

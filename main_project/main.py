@@ -3,13 +3,13 @@ from tkinter import Tk
 from database import Database
 from login import Login
 from signup import Signup
-from session import Session
+from session import SessionManager
 
 class MainApp:
     def __init__(self, root):
         self.root = root
         self.database = Database()
-        self.session = Session()
+        self.session = SessionManager()
         self.start_app()
 
     def start_app(self):

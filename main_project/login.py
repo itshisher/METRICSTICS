@@ -1,4 +1,5 @@
 import tkinter as tk
+from session import SessionManager
 from tkinter import ttk, messagebox
 from utils import create_label_entry
 from calculator import StatisticsCalculator
@@ -8,7 +9,8 @@ class Login:
         self.root = root
         self.database = database
         self.show_signup = show_signup
-        self.login_ui()
+        self.login_ui()        
+        self.session_manager = SessionManager()
 
     def login_ui(self):
         self.clear_widgets()
@@ -38,8 +40,9 @@ class Login:
         username = self.username_var.get()
         password = self.password_var.get()
 
-        if result := self.database.authenticate_user(username, password):
-            app = StatisticsCalculator(self.root)
+        if user_data := self.database.authenticate_user(username, password):
+            # Assuming authenticate_user returns user-specific data on successful authentication
+            session_id = self.session_manager.create_session(user_data)  # Create a new session
+            app = StatisticsCalculator(self.root, session_id)  # Pass the session ID to the application
         else:
             messagebox.showerror("Error", "User not found!")
-
