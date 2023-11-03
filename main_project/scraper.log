@@ -1,0 +1,9 @@
+02-Nov-23 00:59:28 - ('Numbers to split: ', [12.0, 13.0, 14.0])
+02-Nov-23 00:59:28 - Result successfully displayed!
+02-Nov-23 00:59:28 - ('Minimum number in the list: ', [12.0, 13.0, 14.0], 'is', 12.0)
+02-Nov-23 00:59:29 - ('Numbers to split: ', [12.0, 13.0, 14.0])
+02-Nov-23 00:59:29 - Result successfully displayed!
+02-Nov-23 00:59:29 - ('Maximum number in the list: ', [12.0, 13.0, 14.0], 'is', 14.0)
+02-Nov-23 00:59:31 - ('Numbers to split: ', [12.0, 13.0, 14.0])
+02-Nov-23 00:59:31 - Result successfully displayed!
+02-Nov-23 00:59:31 - ('Mean value in the list: ', [12.0, 13.0, 14.0], 'is', 13.0)
