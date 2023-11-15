@@ -15,9 +15,11 @@ logging.basicConfig(filename="scraper.log", level=logging.DEBUG,
 
 
 class StatisticsCalculator:
-    def __init__(self, root, sessionId):
+    def __init__(self, root, sessionId, username, login_ui):
         self.root = root
         self.sessionId = sessionId
+        self.username = username
+        self.login_ui = login_ui
         self.root.title("Statistic Calculator")
         self.executor = ProcessPoolExecutor()
         self.clear_widgets()
@@ -37,10 +39,16 @@ class StatisticsCalculator:
         self.num_entry.grid(row=0, column=1, sticky="w")
         self.num_entry.focus()
 
-        self.result_label = tk.Label(self.root, text="", padx=20, pady=10, font=("Helvetica", 14))
-        self.result_label.grid(row=2, column=0, columnspan=2, sticky="ew")
+        # self.result_label = tk.Label(self.root, text="", padx=20, pady=10, font=("Helvetica", 14))
+        # self.result_label.grid(row=2, column=0, columnspan=2, sticky="ew")
 
-        self.button_frame = tk.Frame(self.root, padx=20, pady=10)
+        self.result_label = tk.Text(self.root, height=10, width=70)  # Adjust height and width as needed
+        self.scrollbar = tk.Scrollbar(self.root, command=self.result_label.yview)
+        self.result_label.configure(yscrollcommand=self.scrollbar.set)
+        self.result_label.grid(row=2, column=0)
+        self.scrollbar.grid(row=2, column=1, sticky='ns')
+
+        self.button_frame = tk.Frame(self.root, padx=10, pady=10)
         self.button_frame.grid(row=3, column=0, columnspan=2, sticky="ew")
 
         # Populate the frame with buttons
@@ -67,7 +75,7 @@ class StatisticsCalculator:
         self.calculateMode_button.grid(row=2, column=1, columnspan=1, sticky="ew", padx=10, pady=5)
 
         self.calculateMedian_button = tk.Button(self.button_frame, text="Calculate Median", command=self.calculateMedian,
-		                                   font=("Helvetica", 15))
+                                           font=("Helvetica", 15))
         self.calculateMedian_button.grid(row=3, column=0, columnspan=1, sticky="ew", padx=10, pady=5)
 
         self.calculateMAD_button = tk.Button(self.button_frame, text="Calculate Mean Absolute Deviation", command=self.calculateMAD,
@@ -90,8 +98,14 @@ class StatisticsCalculator:
         self.clear_data_button.grid(row=6, column=1, columnspan=1, sticky="ew", padx=5, pady=2)
 
         self.save_data_button = tk.Button(self.button_frame, text="Add record", command=self.write_file, font=("Helvetica", 15))
-        self.save_data_button.grid(row=7, column=0, columnspan=2, sticky="ew", padx=10, pady=5)
-
+        self.save_data_button.grid(row=7, column=0, columnspan=2, sticky="ew", padx=5, pady=5)
+        
+        self.previous_button = tk.Button(self.button_frame, text="Previous Session", command=self.previous_session, font=("Helvetica", 15))
+        self.previous_button.grid(row=8, column=0, columnspan=1, sticky="ew", padx=5, pady=5)
+        
+        self.logout_button = tk.Button(self.button_frame, text="Logout", command=self.logout, font=("Helvetica", 15))
+        self.logout_button.grid(row=8, column=1, columnspan=2, sticky="ew", padx=5, pady=5)
+        
 
     def split_numbers(self, input_str):
         num_list = []
@@ -168,7 +182,7 @@ class StatisticsCalculator:
             for num in num_list:
                 if num < min_value:
                     min_value = num
-            self.display_result(f"Minimum is: {min_value}")
+            self.display_result(f"Minimum is: {int(min_value)}")
             info = (
                 "Minimum number in the list: ",
                 num_list,
@@ -185,7 +199,7 @@ class StatisticsCalculator:
             for num in num_list:
                 if num > max_value:
                     max_value = num
-            self.display_result(f"Maximum is: {max_value}")
+            self.display_result(f"Maximum is: {int(max_value)}")
             info = (
                 "Maximum number in the list: ",
                 num_list,
@@ -317,21 +331,43 @@ class StatisticsCalculator:
 
         return callback
 
+    # def display_result(self, result_text):
+    #     self.result_label.config(text=result_text)
+    #     logging.info('Result successfully displayed!')
+
     def display_result(self, result_text):
-        self.result_label.config(text=result_text)
+        # Modified part - Updating the display_result method
+        self.result_label.insert(tk.END, result_text + "\n")  # Appends the new result
         logging.info('Result successfully displayed!')
 
     def upload_file(self):
+        self.result_label.delete('1.0', tk.END)
         self.file_path = filedialog.askopenfilename(filetypes=[("Text files", "*.csv")])
         if self.file_path:
             with open(self.file_path, 'r') as file:
-                data = file.read()
+                csv_reader = csv.reader(file)
+                common_separated_numbers = ",".join(
+                    ",".join(str(int(value)) for value in row) 
+                    for row in csv_reader
+                )
                 self.num_entry.delete(0, "end")
-                self.num_entry.insert(0, data)
-        logging.info('File successfully uploaded!')
+                self.num_entry.insert(0, common_separated_numbers)
+
+            logging.info('File successfully uploaded!')
+
+    def logout(self):
+        # self.root.destroy()
+        self.login_ui()
+
+    def previous_session(self):
+        with open(f"Output_{self.username}.csv", 'r') as file:
+                content = file.read().strip()  # Remove any trailing whitespace or newline characters
+                sets = content.split('\n\n')  # Splitting by double newline to get each set of data
+                return self.display_result(sets[-1]) if sets else  self.display_result("No content found")  # Return the last set of data
 
     def write_file(self):
-        with open("myfile.csv", "a+", newline="") as f:
+        self.result_label.delete('1.0', tk.END)
+        with open(f"Output_{self.username}.csv", "a+", newline="") as f:
             wt = csv.writer(f, delimiter=',')
             min_value = self.calculateMin()
             max_value = self.calculateMax()
@@ -340,23 +376,35 @@ class StatisticsCalculator:
             median_value = self.calculateMedian()
             mad_value = self.calculateMAD()
             sd_value = self.calculateSD()
-            wt.writerow(['Minimum', 'Maximum', 'Mode', 'Median', 'Arithmetic mean', 'Mean absolute deviation',
-                            'Standard deviation'])
-            wt.writerow([min_value, max_value, mode_value, median_value, mean_value, mad_value, sd_value])
-            print("Record has been inserted!")
-            logging.info('File successfully saved!')
+            if min_value is None:
+                logging.info('No input values found!')
+                print("No input values found!")
+            else :
+                # wt.writerow(['Statistic', 'Value'])
+                wt.writerow(['Minimum', min_value])
+                wt.writerow(['Maximum', max_value])
+                wt.writerow(['Mode', mode_value])
+                wt.writerow(['Median', median_value])
+                wt.writerow(['Arithmetic mean', mean_value])
+                wt.writerow(['Mean absolute deviation', mad_value])
+                wt.writerow(['Standard deviation', sd_value])
+                wt.writerow([])  
+                print("Record has been inserted!")
+                logging.info('File successfully saved!')
         f.close()
 
     def generate_data(self):
-        with open("data.csv", 'w', newline='') as data:
+        self.result_label.delete('1.0', tk.END)
+        with open(f"data_{self.username}.csv", 'w', newline='') as data:
             wr = csv.writer(data, quoting=csv.QUOTE_ALL)
             num_data = self.numData.get()
             self.mylist = []
-            self.mylist.extend(random.randint(0, 1000) for _ in range(int(self.num_data)))
+            self.mylist.extend(random.randint(-1000000, 1000000) for _ in range(int(num_data)))
             logging.info('Data successfully generated!')
             wr.writerow(self.mylist)
 
     def reset_data(self):
+        self.result_label.delete('1.0', tk.END)
         for widget in self.button_frame.winfo_children():
             if isinstance(widget, tk.Entry):
                 widget.delete(0, 'end')
