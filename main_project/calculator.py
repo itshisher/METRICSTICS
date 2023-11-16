@@ -8,7 +8,10 @@ import re
 from tkinter import messagebox
 from concurrent.futures import ProcessPoolExecutor
 import time
-
+import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from graph import Graph
 
 # logging format
 logging.basicConfig(filename="scraper.log", level=logging.DEBUG,
@@ -122,6 +125,27 @@ class StatisticsCalculator:
         self.logout_button = tk.Button(self.button_frame, text="Logout", command=self.logout, font=("Helvetica", 15))
         self.logout_button.grid(row=8, column=1, columnspan=2, sticky="ew", padx=5, pady=5)
 
+        self.delete_data_button = tk.Button(self.button_frame, text="Delete Data", command=self.delete_data, font=("Helvetica", 15))
+        self.delete_data_button.grid(row=9, column=0, columnspan=1, sticky="ew", padx=5, pady=5)
+
+        self.graph_button = tk.Button(self.button_frame, text="Graph", command=self.plot_graph, font=("Helvetica", 15))
+        self.graph_button.grid(row=9, column=1, columnspan=2, sticky="ew", padx=5, pady=5)
+        
+    def delete_data(self):
+        self.result_label.delete('1.0', tk.END)
+        try:
+            with open(f"Data_{self.username}.csv", "w") as f:
+                # File is opened in 'w' mode to clear its content
+                pass  # 'pass' is used as a placeholder since no action is needed.
+            print(f)
+            logging.info('All data in the file has been successfully deleted.')
+        except Exception as e:
+            print("AWEF")
+            logging.error(f"Error occurred while trying to delete data: {e}")
+
+    def plot_graph(self):
+        app = Graph(self.root, self.sessionId, self.username, self.login_ui)  # Pass the session ID to the application
+
     def split_numbers(self, input_str):
         num_list = []
         num_str = ""
@@ -179,7 +203,7 @@ class StatisticsCalculator:
             "Minimum number in the list is: ",
             min_value,
             "Time spent on this calculations is: ",
-            "--- %s seconds ---" % (end_time-start_time)
+            f"--- {end_time - start_time} seconds ---",
         )
         logging.info(info)
 
@@ -220,7 +244,7 @@ class StatisticsCalculator:
             "Maximum number in the list is : ",
             max_value,
             "Time spent on this calculations is: ",
-            "--- %s seconds ---" % (end_time - start_time)
+            f"--- {end_time - start_time} seconds ---",
         )
         logging.info(info)
 
@@ -263,7 +287,7 @@ class StatisticsCalculator:
             "Mean value in the list is: ",
             mean,
             "Time spent on this calculations is: ",
-            "--- %s seconds ---" % (end_time - start_time)
+            f"--- {end_time - start_time} seconds ---",
         )
         logging.info(info)
 
@@ -294,6 +318,7 @@ class StatisticsCalculator:
 
         if max_count == 1:
             self.display_result("No mode found, all numbers appear once")
+            return None
         else:
             self.display_result(f"Mode is: {modes}")
         end_time = time.time()
@@ -303,7 +328,7 @@ class StatisticsCalculator:
             "Mode in the list is: ",
             modes,
             "Time spent on this calculations is: ",
-            "--- %s seconds ---" % (end_time - start_time)
+            f"--- {end_time - start_time} seconds ---",
         )
         logging.info(info)
 
@@ -354,7 +379,7 @@ class StatisticsCalculator:
             "Median in the list is: ",
             median,
             "Time spent on this calculations is: ",
-            "--- %s seconds ---" % (end_time - start_time)
+            f"--- {end_time - start_time} seconds ---",
         )
         logging.info(info)
 
@@ -377,7 +402,7 @@ class StatisticsCalculator:
             "Mean absolute deviation in the list is: ",
             mad,
             "Time spent on this calculations is: ",
-            "--- %s seconds ---" % (end_time - start_time)
+            f"--- {end_time - start_time} seconds ---",
         )
         logging.info(info)
         return mad
@@ -411,7 +436,7 @@ class StatisticsCalculator:
             "Standard deviation in the list is: ",
             std_deviation,
             "Time spent on this calculations is: ",
-            "--- %s seconds ---" % (end_time - start_time)
+            f"--- {end_time - start_time} seconds ---",
         )
         logging.info(info)
         return std_deviation
@@ -456,6 +481,7 @@ class StatisticsCalculator:
         self.login_ui()
 
     def previous_session(self):
+        self.result_label.delete('1.0', tk.END)
         with open(f"Output_{self.username}.csv", 'r') as file:
             content = file.read().strip()  # Remove any trailing whitespace or newline characters
             sets = content.split('\n\n')  # Splitting by double newline to get each set of data
@@ -480,7 +506,10 @@ class StatisticsCalculator:
                 # wt.writerow(['Statistic', 'Value'])
                 wt.writerow(['Minimum', min_value])
                 wt.writerow(['Maximum', max_value])
-                wt.writerow(['Mode', mode_value])
+                if mode_value != None: 
+                    wt.writerow(['Mode', mode_value])
+                else : 
+                    wt.writerow(['Mode', 'None'])
                 wt.writerow(['Median', median_value])
                 wt.writerow(['Arithmetic mean', mean_value])
                 wt.writerow(['Mean absolute deviation', mad_value])
@@ -492,7 +521,7 @@ class StatisticsCalculator:
 
     def generate_data(self):
         self.result_label.delete('1.0', tk.END)
-        with open(f"data_{self.username}.csv", 'w', newline='') as data:
+        with open(f"Data_{self.username}.csv", 'w', newline='') as data:
             wr = csv.writer(data, quoting=csv.QUOTE_ALL)
             num_data = self.numData.get()
             self.mylist = []
