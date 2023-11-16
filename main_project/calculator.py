@@ -7,6 +7,7 @@ import logging
 import re
 from tkinter import messagebox
 from concurrent.futures import ProcessPoolExecutor
+import time
 
 
 # logging format
@@ -144,6 +145,7 @@ class StatisticsCalculator:
         return num_list
 
     def calculateMin(self):
+        start_time = time.time()
         input_str = self.num_entry.get()
         num_list = self.split_numbers(input_str)
         if not num_list:
@@ -170,17 +172,21 @@ class StatisticsCalculator:
 
         # Display the minimum value and log the information
         self.display_result(f"Minimum is: {min_value}")
+        end_time = time.time()
         info = (
-            "Minimum number in the list: ",
-            num_list,
-            "is",
-            min_value
+            "The length of dataset is: ",
+            len(num_list),
+            "Minimum number in the list is: ",
+            min_value,
+            "Time spent on this calculations is: ",
+            "--- %s seconds ---" % (end_time-start_time)
         )
         logging.info(info)
 
         return min_value
 
     def calculateMax(self):
+        start_time = time.time()
         input_str = self.num_entry.get()
         num_list = self.split_numbers(input_str)
         if not num_list:
@@ -207,17 +213,21 @@ class StatisticsCalculator:
 
         # Display the maximum value and log the information
         self.display_result(f"Maximum is: {max_value}")
+        end_time = time.time()
         info = (
-            "Maximum number in the list: ",
-            num_list,
-            "is",
-            max_value
+            "The length of dataset is: ",
+            len(num_list),
+            "Maximum number in the list is : ",
+            max_value,
+            "Time spent on this calculations is: ",
+            "--- %s seconds ---" % (end_time - start_time)
         )
         logging.info(info)
 
         return max_value
 
     def calculateMean(self):
+        start_time = time.time()
         input_str = self.num_entry.get()
         num_list = self.split_numbers(input_str)
         if not num_list:
@@ -246,17 +256,21 @@ class StatisticsCalculator:
 
         # Display the mean and log the information
         self.display_result(f"Mean is: {mean}")
+        end_time = time.time()
         info = (
-            "Mean value in the list: ",
-            num_list,
-            "is",
-            mean
+            "The length of dataset is: ",
+            len(num_list),
+            "Mean value in the list is: ",
+            mean,
+            "Time spent on this calculations is: ",
+            "--- %s seconds ---" % (end_time - start_time)
         )
         logging.info(info)
 
         return mean
 
     def calculateMode(self):
+        start_time = time.time()
         input_str = self.num_entry.get()
         num_list = self.split_numbers(input_str)
         if not num_list:
@@ -282,18 +296,21 @@ class StatisticsCalculator:
             self.display_result("No mode found, all numbers appear once")
         else:
             self.display_result(f"Mode is: {modes}")
-
+        end_time = time.time()
         info = (
-            "Mode/modes in the list: ",
-            num_list,
-            "is/are",
-            modes
+            "The length of dataset is: ",
+            len(num_list),
+            "Mode in the list is: ",
+            modes,
+            "Time spent on this calculations is: ",
+            "--- %s seconds ---" % (end_time - start_time)
         )
         logging.info(info)
 
         return modes
 
     def calculateMedian(self):
+        start_time = time.time()
         input_str = self.num_entry.get()
         num_list = self.split_numbers(input_str)
         def partition(lst, low, high):
@@ -330,17 +347,21 @@ class StatisticsCalculator:
         median = quick_select(num_list, 0, n - 1, mid - 1) if is_even else quick_select(num_list, 0, n - 1, mid)
 
         self.display_result(f"Median is: {median}")
+        end_time = time.time()
         info = (
-            "Median in the list: ",
-            num_list,
-            "is",
-            median
+            "The length of dataset is: ",
+            len(num_list),
+            "Median in the list is: ",
+            median,
+            "Time spent on this calculations is: ",
+            "--- %s seconds ---" % (end_time - start_time)
         )
         logging.info(info)
 
         return median
 
     def calculateMAD(self):
+        start_time = time.time()
         input_str = self.num_entry.get()
         num_list = self.split_numbers(input_str)
         if not num_list:
@@ -349,16 +370,20 @@ class StatisticsCalculator:
         mean = self.calculateMean()
         mad = sum(abs(num - mean) for num in num_list) / len(num_list) if len(num_list) > 0 else 0
         self.display_result(f"Mean Absolute Deviation is: {mad}")
+        end_time = time.time()
         info = (
-            "Mean absolute deviation in the list: ",
-            num_list,
-            "is",
-            mad
+            "The length of dataset is: ",
+            len(num_list),
+            "Mean absolute deviation in the list is: ",
+            mad,
+            "Time spent on this calculations is: ",
+            "--- %s seconds ---" % (end_time - start_time)
         )
         logging.info(info)
         return mad
 
     def calculateSD(self):
+        start_time = time.time()
         input_str = self.num_entry.get()
         num_list = self.split_numbers(input_str)
         if not num_list or len(num_list) == 1:
@@ -379,11 +404,14 @@ class StatisticsCalculator:
         std_deviation = variance ** 0.5
 
         self.display_result(f"Standard Deviation is: {std_deviation}")
+        end_time = time.time()
         info = (
-            "Standard deviation in the list: ",
-            num_list,
-            "is",
-            std_deviation
+            "The length of dataset is: ",
+            len(num_list),
+            "Standard deviation in the list is: ",
+            std_deviation,
+            "Time spent on this calculations is: ",
+            "--- %s seconds ---" % (end_time - start_time)
         )
         logging.info(info)
         return std_deviation
