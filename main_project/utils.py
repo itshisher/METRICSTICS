@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 
 def create_label_entry(parent, label_text, entry_var, is_password=False):
+    # function to configure the label entries for login and signup classes
     frame = ttk.Frame(parent)
     label = ttk.Label(frame, text=label_text)
     label.pack(side=tk.LEFT, padx=5, pady=5)

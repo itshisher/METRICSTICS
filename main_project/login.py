@@ -6,6 +6,7 @@ from calculator import StatisticsCalculator
 
 class Login:
     def __init__(self, root, database, show_signup):
+        # an instance method that initializes a newly created object
         self.root = root
         self.database = database
         self.show_signup = show_signup
@@ -14,6 +15,7 @@ class Login:
 
 
     def login_ui(self):
+        # login page layout
         self.clear_widgets()
         self.root.title("Login")
 
@@ -51,6 +53,7 @@ class Login:
             widget.destroy()
 
     def login(self):
+        # function to verify user login info
         username = self.username_var.get()
         password = self.password_var.get()
         if user_data := self.database.authenticate_user(username, password):
@@ -61,4 +64,5 @@ class Login:
             messagebox.showerror("Error", "User not found!")
 
     def guest(self):
+        # users can choose to ignore login and signup to use the system directly
         app = StatisticsCalculator(self.root, None, 'Guest', self.login_ui)  # Pass the session ID to the application

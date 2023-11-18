@@ -13,6 +13,12 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from graph import Graph
 
+'''
+calculator.py
+this class provide the functionalities of our metricstics system 
+and also services to connect to the database in order to login
+'''
+
 # logging format
 logging.basicConfig(filename="scraper.log", level=logging.DEBUG,
                     format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
@@ -20,6 +26,7 @@ logging.basicConfig(filename="scraper.log", level=logging.DEBUG,
 
 class StatisticsCalculator:
     def __init__(self, root, sessionId, username, login_ui):
+        # an instance method that initializes a newly created object
         self.root = root
         self.sessionId = sessionId
         self.username = username
@@ -30,6 +37,8 @@ class StatisticsCalculator:
         self.create_widgets()
 
     def create_widgets(self):
+        # layout of the system when class is initialzed
+
         self.header = tk.Label(self.root, text="METRICSTICS system", bg="green", fg="white", font=("Helvetica", 16))
         self.header.grid(row=0, column=0, columnspan=2, sticky="ew", padx=10, pady=10)
 
@@ -125,13 +134,15 @@ class StatisticsCalculator:
         self.logout_button = tk.Button(self.button_frame, text="Logout", command=self.logout, font=("Helvetica", 15))
         self.logout_button.grid(row=8, column=1, columnspan=2, sticky="ew", padx=5, pady=5)
 
-        self.delete_data_button = tk.Button(self.button_frame, text="Delete Data", command=self.delete_data, font=("Helvetica", 15))
+        self.delete_data_button = tk.Button(self.button_frame, text="Delete Data", command=self.delete_data,
+                                            font=("Helvetica", 15))
         self.delete_data_button.grid(row=9, column=0, columnspan=1, sticky="ew", padx=5, pady=5)
 
         self.graph_button = tk.Button(self.button_frame, text="Graph", command=self.plot_graph, font=("Helvetica", 15))
         self.graph_button.grid(row=9, column=1, columnspan=2, sticky="ew", padx=5, pady=5)
-        
+
     def delete_data(self):
+        # function to clear the page
         self.result_label.delete('1.0', tk.END)
         try:
             with open(f"Data_{self.username}.csv", "w") as f:
@@ -147,6 +158,7 @@ class StatisticsCalculator:
         app = Graph(self.root, self.sessionId, self.username, self.login_ui)  # Pass the session ID to the application
 
     def split_numbers(self, input_str):
+        # function to split input data and print error message if users input non digit characters
         num_list = []
         num_str = ""
         for char in input_str:
@@ -155,7 +167,7 @@ class StatisticsCalculator:
             elif num_str:
                 num_list.append(float(num_str))
                 num_str = ""
-            elif not char.isdigit():  # erroe msg if with wrong input
+            elif not char.isdigit():  # error msg if with wrong input
                 messagebox.showerror('Python Error', 'Error: This is not an digit! Please try again!')
                 logging.info('Input data is not a digit...')
                 return
@@ -169,6 +181,8 @@ class StatisticsCalculator:
         return num_list
 
     def calculateMin(self):
+        # function to get the minimal of the dataset
+        # time function included here to get the execution time
         start_time = time.time()
         input_str = self.num_entry.get()
         num_list = self.split_numbers(input_str)
@@ -210,6 +224,7 @@ class StatisticsCalculator:
         return min_value
 
     def calculateMax(self):
+        # function to get the maximum of the dataset
         start_time = time.time()
         input_str = self.num_entry.get()
         num_list = self.split_numbers(input_str)
@@ -251,6 +266,7 @@ class StatisticsCalculator:
         return max_value
 
     def calculateMean(self):
+        # function to get the mean value
         start_time = time.time()
         input_str = self.num_entry.get()
         num_list = self.split_numbers(input_str)
@@ -270,8 +286,8 @@ class StatisticsCalculator:
             left_sum, left_count = mean_recursive(arr[:mid])  # Mean and count of the left segment
             right_sum, right_count = mean_recursive(arr[mid:])  # Mean and count of the right segment
 
-            total = left_sum + right_sum # Sum of the entire segment
-            combined_count = left_count + right_count # Count of the entire segment
+            total = left_sum + right_sum  # Sum of the entire segment
+            combined_count = left_count + right_count  # Count of the entire segment
             return total, combined_count
 
         # Call the recursive function on the entire list
@@ -294,6 +310,7 @@ class StatisticsCalculator:
         return mean
 
     def calculateMode(self):
+        # function to get the mode value
         start_time = time.time()
         input_str = self.num_entry.get()
         num_list = self.split_numbers(input_str)
@@ -302,21 +319,22 @@ class StatisticsCalculator:
 
         mode_dict = {}
         max_count = 0
-        modes = []
+        modes = [] # a list of modes
 
+        # find frequency of each element and put it into mode_dict
         for num in num_list:
             if num in mode_dict:
                 mode_dict[num] += 1
             else:
                 mode_dict[num] = 1
 
-            if mode_dict[num] > max_count:
+            if mode_dict[num] > max_count: # get elements with the most frequency and put it into modes list
                 max_count = mode_dict[num]
                 modes = [num]
             elif mode_dict[num] == max_count and num not in modes:
                 modes.append(num)
 
-        if max_count == 1:
+        if max_count == 1: # each element appears only once
             self.display_result("No mode found, all numbers appear once")
             return None
         else:
@@ -335,9 +353,12 @@ class StatisticsCalculator:
         return modes
 
     def calculateMedian(self):
+        # function to calculate median
         start_time = time.time()
         input_str = self.num_entry.get()
         num_list = self.split_numbers(input_str)
+
+        # to find median we need to sort the dataset first
         def partition(lst, low, high):
             pivot = lst[high]
             i = low - 1
@@ -368,7 +389,7 @@ class StatisticsCalculator:
         n = len(num_list)
         is_even = (n % 2 == 0)
         mid = n // 2
-
+        # get the index of the median after the data is sorted
         median = quick_select(num_list, 0, n - 1, mid - 1) if is_even else quick_select(num_list, 0, n - 1, mid)
 
         self.display_result(f"Median is: {median}")
@@ -386,6 +407,7 @@ class StatisticsCalculator:
         return median
 
     def calculateMAD(self):
+        # function to get mean absolute deviation by calculatedMean() function
         start_time = time.time()
         input_str = self.num_entry.get()
         num_list = self.split_numbers(input_str)
@@ -393,6 +415,7 @@ class StatisticsCalculator:
             return None
 
         mean = self.calculateMean()
+        # since MAD is depend on mean, we simply calculate MAD from the mean value
         mad = sum(abs(num - mean) for num in num_list) / len(num_list) if len(num_list) > 0 else 0
         self.display_result(f"Mean Absolute Deviation is: {mad}")
         end_time = time.time()
@@ -408,6 +431,7 @@ class StatisticsCalculator:
         return mad
 
     def calculateSD(self):
+        # function to get value of standard deviation
         start_time = time.time()
         input_str = self.num_entry.get()
         num_list = self.split_numbers(input_str)
@@ -462,6 +486,7 @@ class StatisticsCalculator:
         logging.info('Result successfully displayed!')
 
     def upload_file(self):
+        # function to upload file from the local machine
         self.result_label.delete('1.0', tk.END)
         self.file_path = filedialog.askopenfilename(filetypes=[("Text files", "*.csv")])
         if self.file_path:
@@ -481,6 +506,7 @@ class StatisticsCalculator:
         self.login_ui()
 
     def previous_session(self):
+        # function to get the previously calculated results
         self.result_label.delete('1.0', tk.END)
         with open(f"Output_{self.username}.csv", 'r') as file:
             content = file.read().strip()  # Remove any trailing whitespace or newline characters
@@ -489,6 +515,7 @@ class StatisticsCalculator:
                 "No content found")  # Return the last set of data
 
     def write_file(self):
+        # function to save results to local
         self.result_label.delete('1.0', tk.END)
         with open(f"Output_{self.username}.csv", "a+", newline="") as f:
             wt = csv.writer(f, delimiter=',')
@@ -506,9 +533,9 @@ class StatisticsCalculator:
                 # wt.writerow(['Statistic', 'Value'])
                 wt.writerow(['Minimum', min_value])
                 wt.writerow(['Maximum', max_value])
-                if mode_value != None: 
+                if mode_value != None:
                     wt.writerow(['Mode', mode_value])
-                else : 
+                else:
                     wt.writerow(['Mode', 'None'])
                 wt.writerow(['Median', median_value])
                 wt.writerow(['Arithmetic mean', mean_value])
@@ -520,6 +547,7 @@ class StatisticsCalculator:
         f.close()
 
     def generate_data(self):
+        # function to generate the dataset
         self.result_label.delete('1.0', tk.END)
         with open(f"Data_{self.username}.csv", 'w', newline='') as data:
             wr = csv.writer(data, quoting=csv.QUOTE_ALL)
@@ -530,6 +558,7 @@ class StatisticsCalculator:
             wr.writerow(self.mylist)
 
     def reset_data(self):
+        # function to clear the user input
         self.result_label.delete('1.0', tk.END)
         for widget in self.button_frame.winfo_children():
             if isinstance(widget, tk.Entry):
